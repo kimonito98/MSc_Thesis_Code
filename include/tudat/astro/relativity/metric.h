@@ -103,6 +103,9 @@ extern std::shared_ptr< PPNParameterSet > ppnParameterSet;
 //! Global parameter denoting EP violation in proper time rate, initialized to GR value of 0 upon compilation.
 extern double equivalencePrincipleLpiViolationParameter;
 
+// Michael
+extern double ComptonWavelength;
+
 }
 
 }

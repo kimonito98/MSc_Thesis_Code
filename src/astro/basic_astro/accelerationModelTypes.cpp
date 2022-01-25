@@ -26,6 +26,9 @@ std::string getAccelerationModelName( const AvailableAcceleration accelerationTy
     case central_gravity:
         accelerationName = "central gravity ";
         break;
+    case central_gravity_compton:
+        accelerationName = "central gravity compton";
+        break;
     case aerodynamic:
         accelerationName = "aerodynamic ";
         break;
@@ -100,6 +103,11 @@ AvailableAcceleration getAccelerationModelType(
                 accelerationModel ) != nullptr )
     {
         accelerationType = central_gravity;
+    }
+    else if( std::dynamic_pointer_cast< ComptonRelativisticAcceleration >(
+            accelerationModel ) != nullptr )
+    {
+        accelerationType = central_gravity_compton;
     }
     else if( std::dynamic_pointer_cast< CannonBallRadiationPressureAcceleration >(
                  accelerationModel ) != nullptr )

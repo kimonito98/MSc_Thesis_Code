@@ -120,6 +120,9 @@ std::string getParameterTypeString( const EstimatebleParametersEnum parameterTyp
     case scaled_longitude_libration_amplitude:
         parameterDescription = " scaled longitude libration amplitude ";
         break;
+    case compton_wavelength:
+        parameterDescription = " Compton wavelength of the gravitron "; // Michael
+        break;
     default:
         std::string errorMessage = "Error when getting parameter string, did not recognize parameter " +
                 std::to_string( parameterType );
@@ -244,6 +247,9 @@ bool isDoubleParameter( const EstimatebleParametersEnum parameterType )
         isDoubleParameter = true;
         break;
     case scaled_longitude_libration_amplitude:
+        isDoubleParameter = true;
+        break;
+    case compton_wavelength: // Michael
         isDoubleParameter = true;
         break;
     default:

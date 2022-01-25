@@ -33,6 +33,9 @@
 #include "tudat/astro/basic_astro/accelerationModelTypes.h"
 #include "tudat/astro/orbit_determination/acceleration_partials/tidalLoveNumberPartialInterface.h"
 
+// Michael
+#include "tudat/astro/orbit_determination/acceleration_partials/comptonWavelengthAccelerationPartial.h"
+
 namespace tudat
 {
 
@@ -95,6 +98,24 @@ std::shared_ptr< acceleration_partials::AccelerationPartial > createAnalyticalAc
         {
             // Create partial-calculating object.
             accelerationPartial = std::make_shared< CentralGravitationPartial >
+                    ( std::dynamic_pointer_cast< CentralGravitationalAccelerationModel3d >( accelerationModel ),
+                      acceleratedBody.first, acceleratingBody.first );
+        }
+        break;
+
+    // Michael
+    case central_gravity_Compton:
+
+        // Check if identifier is consistent with type.
+        if( std::dynamic_pointer_cast< CentralGravitationalAccelerationModel3d >( accelerationModel ) == nullptr )
+        {
+            throw std::runtime_error( "Acceleration class type does not match acceleration type (central_gravity) "
+                                      "when making acceleration partial." );
+        }
+        else
+        {
+            // Create partial-calculating object.
+            accelerationPartial = std::make_shared< comptonWavelengthAccelerationPartial >
                     ( std::dynamic_pointer_cast< CentralGravitationalAccelerationModel3d >( accelerationModel ),
                       acceleratedBody.first, acceleratingBody.first );
         }

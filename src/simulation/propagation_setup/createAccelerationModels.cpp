@@ -41,7 +41,7 @@ using namespace gravitation;
 using namespace basic_astrodynamics;
 using namespace electromagnetism;
 using namespace ephemerides;
-
+using namespace relativity;
 
 //! Function to create a direct (i.e. not third-body) gravitational acceleration (of any type)
 std::shared_ptr< basic_astrodynamics::AccelerationModel< Eigen::Vector3d > > createDirectGravitationalAcceleration(
@@ -72,7 +72,7 @@ std::shared_ptr< basic_astrodynamics::AccelerationModel< Eigen::Vector3d > > cre
                     nameOfBodyUndergoingAcceleration,
                     nameOfBodyExertingAcceleration,
                     sumGravitationalParameters );
-        break;
+            break;
     case spherical_harmonic_gravity:
         accelerationModel = createSphericalHarmonicsGravityAcceleration(
                     bodyUndergoingAcceleration,
@@ -265,6 +265,49 @@ std::shared_ptr< CentralGravitationalAccelerationModel3d > createCentralGravityA
 
 
     return accelerationModelPointer;
+}
+
+
+//! Function to create compton gravity acceleration model.
+std::shared_ptr< relativity::ComptonRelativisticAcceleration >
+createComptonAccelerationModel(
+        const std::shared_ptr< Body > bodyUndergoingAcceleration,
+        const std::shared_ptr< Body > bodyExertingAcceleration,
+        const std::string& nameOfBodyUndergoingAcceleration,
+        const std::string& nameOfBodyExertingAcceleration )
+{
+
+    // Check if body is endowed with a gravity field model (i.e. is capable of exerting
+    // gravitation acceleration).
+    if( bodyExertingAcceleration->getGravityFieldModel( ) == nullptr )
+    {
+        throw std::runtime_error(
+                std::string( "Error, gravity field model not set when making central ") +
+                " gravitational acceleration of " + nameOfBodyExertingAcceleration + " on " +
+                nameOfBodyUndergoingAcceleration );
+    }
+    else
+    {
+        std::function< double( ) > gravitationalParameterFunction;
+
+        gravitationalParameterFunction =
+                std::bind( &gravitation::GravityFieldModel::getGravitationalParameter,
+                           bodyExertingAcceleration->getGravityFieldModel( ) );
+
+        //std::function< double( ) > comptonWavelengthFunction = std::bind( &PPNParameterSet::getParameterGamma, ppnParameterSet );
+
+        // Create acceleration object.
+        std::function< void( Eigen::Vector3d& ) > bodyUndergoingAccelerationPositionFunction =
+                std::bind( &Body::getPositionByReference, bodyUndergoingAcceleration, std::placeholders::_1 );
+        std::function< void( Eigen::Vector3d& ) > bodyExertingAccelerationPositionFunction =
+                std::bind( &Body::getPositionByReference, bodyExertingAcceleration, std::placeholders::_1 );
+
+        return std::make_shared< relativity::ComptonRelativisticAcceleration >(
+                        std::bind( &Body::getPosition, bodyExertingAcceleration ),
+                        std::bind( &Body::getPosition, bodyUndergoingAcceleration ),
+                        gravitationalParameterFunction );
+    }
+
 }
 
 //! Function to create spherical harmonic gravity acceleration model.
@@ -1333,6 +1376,13 @@ std::shared_ptr< AccelerationModel< Eigen::Vector3d > > createAccelerationModel(
                     nameOfBodyUndergoingAcceleration, nameOfBodyExertingAcceleration,
                     centralBody, nameOfCentralBody );
         break;
+
+    case central_gravity_compton:
+        accelerationModelPointer = createComptonAccelerationModel(
+                bodyUndergoingAcceleration, bodyExertingAcceleration,
+                nameOfBodyUndergoingAcceleration, nameOfBodyExertingAcceleration);
+        break;
+
     case spherical_harmonic_gravity:
         accelerationModelPointer = createGravitationalAccelerationModel(
                     bodyUndergoingAcceleration, bodyExertingAcceleration, accelerationSettings,

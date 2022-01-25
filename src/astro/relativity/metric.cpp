@@ -23,6 +23,9 @@ std::shared_ptr< PPNParameterSet > ppnParameterSet = std::make_shared< PPNParame
 
 double equivalencePrincipleLpiViolationParameter = 0.0;
 
+// Michael
+double ComptonWavelength = std::numeric_limits<double>::infinity();
+
 }
 
 }

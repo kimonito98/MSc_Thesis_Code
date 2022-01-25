@@ -44,7 +44,7 @@ foreach(_TUDAT_BOOST_COMPONENT ${_TUDAT_REQUIRED_BOOST_LIBS})
         if(Boost_USE_STATIC_LIBS)
             add_library(Boost::${_TUDAT_BOOST_COMPONENT} STATIC IMPORTED)
         else()
-            add_library(Boost::${_TUDAT_BOOST_COMPONENT} UNKNOWN IMPORTED)
+            add_library(Boost::${_TUDAT_BOOST_COMPONENT} UNKNOWN IMPORTED ../include/tudat/astro/orbit_determination/estimatable_parameters/comptonWavelength.h ../include/tudat/astro/orbit_determination/acceleration_partials/comptonWavelengthAccelerationPartial.h ../src/astro/orbit_determination/acceleration_partials/comptonWavelengthAccelerationPartial.cpp ../include/tudat/astro/relativity/ComptonModel.h ../src/astro/relativity/ComptonModel.cpp)
         endif()
         set_target_properties(Boost::${_TUDAT_BOOST_COMPONENT} PROPERTIES
                 INTERFACE_INCLUDE_DIRECTORIES "${Boost_INCLUDE_DIRS}")

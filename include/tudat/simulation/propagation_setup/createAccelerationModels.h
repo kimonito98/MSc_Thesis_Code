@@ -28,6 +28,9 @@
 #include "tudat/astro/ephemerides/frameManager.h"
 #include "tudat/astro/gravitation/directTidalDissipationAcceleration.h"
 
+#include "tudat/astro/relativity/ComptonModel.h"
+
+
 namespace tudat
 {
 
@@ -130,6 +133,14 @@ createCentralGravityAcceleratioModel(
         const std::string& nameOfBodyUndergoingAcceleration,
         const std::string& nameOfBodyExertingAcceleration,
         const bool useCentralBodyFixedFrame );
+
+
+std::shared_ptr< relativity::ComptonRelativisticAcceleration >
+createComptonAccelerationModel(
+        const std::shared_ptr< Body > bodyUndergoingAcceleration,
+        const std::shared_ptr< Body > bodyExertingAcceleration,
+        const std::string& nameOfBodyUndergoingAcceleration,
+        const std::string& nameOfBodyExertingAcceleration );
 
 //! Function to create spherical harmonic gravity acceleration model.
 /*!

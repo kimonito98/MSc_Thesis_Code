@@ -23,6 +23,9 @@
 #include "tudat/simulation/propagation_setup/createThrustModelGuidance.h"
 // #include "tudat/math/interpolators/createInterpolator.h"
 
+#include "tudat/astro/relativity/ComptonModel.h"
+
+
 namespace tudat
 {
 
@@ -83,6 +86,13 @@ inline std::shared_ptr< AccelerationSettings > aerodynamicAcceleration( )
 inline std::shared_ptr< AccelerationSettings > cannonBallRadiationPressureAcceleration( )
 {
     return std::make_shared< AccelerationSettings >( basic_astrodynamics::cannon_ball_radiation_pressure );
+}
+
+
+//! @get_docstring(ComptonRelativisticAcceleration)
+inline std::shared_ptr< AccelerationSettings > ComptonRelativisticAcceleration( )
+{
+    return std::make_shared< AccelerationSettings >( basic_astrodynamics::central_gravity_compton );
 }
 
 // Class for providing settings for spherical harmonics acceleration model.

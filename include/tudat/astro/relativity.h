@@ -15,5 +15,6 @@
 #include "relativity/relativisticAccelerationCorrection.h"
 #include "relativity/relativisticLightTimeCorrection.h"
 #include "relativity/relativisticTimeConversion.h"
+#include "relativity/ComptonModel.h"
 
 #endif // TUDAT_RELATIVITY_H
